@@ -163,7 +163,11 @@ class StatusBarLyricsPublisher(
             remote.setPlaybackState(false)
             return
         }
-        val durationMs = metadata.duration.toLong() * 1000L
+        // MediaMetadata.duration is -1 when unknown; fall back to the player's duration if it has one.
+        val durationMs =
+            metadata.duration.takeIf { it > 0 }?.let { it.toLong() * 1000L }
+                ?: attachedPlayer?.duration?.takeIf { it > 0 }
+                ?: 0L
         val lines =
             entity?.lyrics
                 ?.takeIf { it.isNotBlank() && it != LyricsEntity.LYRICS_NOT_FOUND }
