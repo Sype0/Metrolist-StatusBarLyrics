@@ -294,6 +294,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.kuromoji.ipadic)
     implementation(libs.tinypinyin)
+    implementation(libs.lyricon.provider)
     ksp(libs.room.compiler)
 
     implementation(libs.hilt)

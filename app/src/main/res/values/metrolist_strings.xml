@@ -115,6 +115,8 @@
     <string name="lyrics_auto_scroll">Auto-scroll lyrics</string>
     <string name="hide_status_bar_fullscreen">Hide status bar on fullscreen</string>
     <string name="hide_status_bar_fullscreen_desc">Hide the status bar when lyrics fullscreen mode is active</string>
+    <string name="status_bar_lyrics">Status bar lyrics</string>
+    <string name="status_bar_lyrics_desc">Send the current song and its synced lyrics to Lyricon (Xposed module) so they can be shown in the status bar</string>
     <string name="show_interval_indicator">Show interval indicator</string>
     <string name="show_interval_indicator_desc">Shows a progress bar during long instrumental gaps</string>
     <string name="respect_agent_positioning">Respect agent positioning</string>

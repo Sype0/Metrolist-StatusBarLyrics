@@ -26,6 +26,9 @@
             <action android:name="android.media.action.DISPLAY_AUDIO_EFFECT_CONTROL_PANEL" />
         </intent>
         <package android:name="com.google.android.projection.gearhead" />
+        <!-- Lyricon status bar lyrics: the central service lives in SystemUI -->
+        <package android:name="com.android.systemui" />
+        <package android:name="io.github.proify.lyricon" />
     </queries>
     <application
         android:name=".App"
@@ -42,6 +45,20 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.Metrolist"
         tools:targetApi="tiramisu">
+
+        <!-- Lyricon (status bar lyrics) provider registration -->
+        <meta-data
+            android:name="lyricon_module"
+            android:value="true" />
+        <meta-data
+            android:name="lyricon_module_author"
+            android:value="Metrolist" />
+        <meta-data
+            android:name="lyricon_module_description"
+            android:value="Built-in Metrolist lyrics provider" />
+        <meta-data
+            android:name="lyricon_module_tags"
+            android:resource="@array/lyricon_module_tags" />
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

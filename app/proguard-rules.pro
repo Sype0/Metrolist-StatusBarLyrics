@@ -195,3 +195,6 @@
 -keepclasseswithmembers class com.metrolist.shazamkit.models.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+## Lyricon provider SDK (AIDL stubs + kotlinx.serialization payloads)
+-keep class io.github.proify.lyricon.** { *; }

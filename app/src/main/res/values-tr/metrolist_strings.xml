@@ -762,6 +762,8 @@
     <string name="show_interval_indicator">Aralık göstergesini göster</string>
     <string name="hide_status_bar_fullscreen_desc">Şarkı sözleri tam ekran modundayken durum çubuğunu gizle</string>
     <string name="hide_status_bar_fullscreen">Tam ekranda durum çubuğunu gizle</string>
+    <string name="status_bar_lyrics">Durum çubuğunda şarkı sözleri</string>
+    <string name="status_bar_lyrics_desc">Çalan şarkıyı ve senkronize sözlerini durum çubuğunda göstermek için Lyricon (Xposed modülü) uygulamasına gönder</string>
     <string name="lyrics_from_provider">Şarkı sözleri sağlayıcısı: %s</string>
     <string name="parsed_from_link">Bağlantıdan ayrıştırıldı</string>
     <string name="autoplay">Oto oynatma</string>

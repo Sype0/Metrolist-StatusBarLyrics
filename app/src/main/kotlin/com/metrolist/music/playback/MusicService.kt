@@ -160,6 +160,7 @@ import com.metrolist.music.constants.ScrobbleDelayPercentKey
 import com.metrolist.music.constants.ScrobbleDelaySecondsKey
 import com.metrolist.music.constants.ScrobbleMinSongDurationKey
 import com.metrolist.music.constants.ShowLyricsKey
+import com.metrolist.music.constants.StatusBarLyricsKey
 import com.metrolist.music.constants.ShuffleModeKey
 import com.metrolist.music.constants.ShufflePlaylistFirstKey
 import com.metrolist.music.constants.SimilarContent
@@ -191,6 +192,7 @@ import com.metrolist.music.extensions.toMediaItem
 import com.metrolist.music.extensions.toPersistQueue
 import com.metrolist.music.extensions.toQueue
 import com.metrolist.music.lyrics.LyricsHelper
+import com.metrolist.music.lyrics.StatusBarLyricsPublisher
 import com.metrolist.music.models.PersistPlayerState
 import com.metrolist.music.models.PersistQueue
 import com.metrolist.music.models.toMediaMetadata
@@ -272,6 +274,8 @@ class MusicService :
 
     @Inject
     lateinit var lyricsHelper: LyricsHelper
+
+    private var statusBarLyricsPublisher: StatusBarLyricsPublisher? = null
 
     @Inject
     lateinit var syncUtils: SyncUtils
@@ -759,6 +763,17 @@ class MusicService :
         // Collecting this flow activates the internal map that updates lyricsProviders in LyricsHelper
         lyricsHelper.preferred.collectLatest(scope) {}
 
+        // Status bar lyrics: mirror song, synced lyrics and playback state to Lyricon when enabled.
+        statusBarLyricsPublisher =
+            StatusBarLyricsPublisher(
+                context = this,
+                scope = scope,
+                database = database,
+                playerFlow = playerFlow,
+                currentMediaMetadata = currentMediaMetadata,
+                enabledFlow = dataStore.data.map { it[StatusBarLyricsKey] ?: false },
+            )
+
         // 4. Watch for EQ profile changes
         scope.launch {
             eqProfileRepository.activeProfile.collect { profile ->
@@ -876,7 +891,9 @@ class MusicService :
 
         combine(
             currentMediaMetadata.distinctUntilChangedBy { it?.id },
-            dataStore.data.map { it[ShowLyricsKey] ?: false }.distinctUntilChanged(),
+            dataStore.data
+                .map { (it[ShowLyricsKey] ?: false) || (it[StatusBarLyricsKey] ?: false) }
+                .distinctUntilChanged(),
         ) { mediaMetadata, showLyrics ->
             mediaMetadata to showLyrics
         }.collectLatest(scope) { (mediaMetadata, showLyrics) ->
@@ -4280,6 +4297,8 @@ class MusicService :
         }
         audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
         castConnectionHandler?.release()
+        statusBarLyricsPublisher?.release()
+        statusBarLyricsPublisher = null
         if (dataStore.get(PersistentQueueKey, true)) {
             saveQueueToDisk()
             savePlayerStateToDisk()

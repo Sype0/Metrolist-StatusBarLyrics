@@ -76,6 +76,7 @@ import com.metrolist.music.constants.LyricsClickKey
 import com.metrolist.music.constants.LyricsGlowEffectKey
 import com.metrolist.music.constants.LyricsLineSpacingKey
 import com.metrolist.music.constants.LyricsScrollKey
+import com.metrolist.music.constants.StatusBarLyricsKey
 import com.metrolist.music.constants.LyricsTextPositionKey
 import com.metrolist.music.constants.LyricsTextSizeKey
 import com.metrolist.music.constants.MiniPlayerBackgroundStyle
@@ -218,6 +219,11 @@ fun AppearanceSettings(
         rememberPreference(
             LyricsScrollKey,
             defaultValue = true,
+        )
+    val (statusBarLyrics, onStatusBarLyricsChange) =
+        rememberPreference(
+            StatusBarLyricsKey,
+            defaultValue = false,
         )
     val (hideStatusBarOnFullscreen, onHideStatusBarOnFullscreenChange) =
         rememberPreference(
@@ -1549,6 +1555,30 @@ fun AppearanceSettings(
                                 )
                             },
                             onClick = { onHideStatusBarOnFullscreenChange(!hideStatusBarOnFullscreen) },
+                        ),
+                    )
+                    add(
+                        Material3SettingsItem(
+                            icon = painterResource(R.drawable.lyrics),
+                            title = { Text(stringResource(R.string.status_bar_lyrics)) },
+                            description = { Text(stringResource(R.string.status_bar_lyrics_desc)) },
+                            trailingContent = {
+                                Switch(
+                                    checked = statusBarLyrics,
+                                    onCheckedChange = onStatusBarLyricsChange,
+                                    thumbContent = {
+                                        Icon(
+                                            painter =
+                                                painterResource(
+                                                    id = if (statusBarLyrics) R.drawable.check else R.drawable.close,
+                                                ),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(SwitchDefaults.IconSize),
+                                        )
+                                    },
+                                )
+                            },
+                            onClick = { onStatusBarLyricsChange(!statusBarLyrics) },
                         ),
                     )
                 },
